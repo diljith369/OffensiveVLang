@@ -4,9 +4,9 @@ import os
 fn main() {
 	
     mut recvdcmd := []byte{len: 3072}
-    listenport := 443
+    listen_on_port := 443
 	println("Not Yet Connected ...")
-	listner := net.listen_tcp(listenport) or {
+	listner := net.listen_tcp(listen_on_port) or {
 		panic(err)
 	}
 	conn := listner.accept() or  {
